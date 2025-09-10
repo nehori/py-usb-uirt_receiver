@@ -20,6 +20,11 @@ A Python script to capture IR signals using the USB-UIRT device and display Pron
    - Download SageTV Windows binary(SageTVSetupx64_xxxx.exe) from [OpenSageTV releases](https://github.com/OpenSageTV/sagetv-windows/releases)
    - Extract the installer and locate the DLL at `C:\Program Files\SageTV\redist\usbuirt\amd64\uuirtdrv.dll`
    - Copy this file to your script directory
+     
+   OR Obtain `uuirtdrv.dll` from usbuirt.com:
+   - Go to the [Support](http://www.usbuirt.com/support.htm) and download the driver
+   - Extract the installer and locate the DLL at `C:\Program Files\SageTV\redist\usbuirt\amd64\uuirtdrv.dll`
+   - Copy this file to your script directory
 3. Place `ftd2xx.dll` in the same directory as `usb_receiver.py`.
 4. Install Python dependencies:
    ```bash
@@ -50,4 +55,5 @@ A Python script to capture IR signals using the USB-UIRT device and display Pron
 MIT License
 
 ## Contributing
+
 Issues and pull requests are welcome! For bug reports or feature requests, include logs from `uuirtlog.txt` and details of your IR remote.
