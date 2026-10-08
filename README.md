@@ -6,7 +6,7 @@ A Python script for learning infrared signals with USB-UIRT and saving Pronto He
 
 - Uses the 64-bit USB-UIRT API.
 - Displays learning progress, signal quality, and carrier frequency.
-- Supports infrared protocols compatible with USB-UIRT, including SONY SIRC, NEC, and RC5.
+- Supports infrared protocols compatible with USB-UIRT.
 - Saves the learned Pronto Hex code to `learned_pronto.txt`.
 - Requires no additional Python packages.
 
@@ -43,23 +43,17 @@ Download a SageTV Windows x64 installer from [OpenSageTV Windows Releases](https
 
 #### Cygwin or Git Bash
 
-Run the following command from the directory containing the installer:
-
 ```bash
 ./SageTVSetupx64_x.x.x.exe /layout "$(cygpath -w "$PWD/SageTV_layout")" /quiet /norestart
 ```
 
 #### Windows Command Prompt
 
-Run the following command from the directory containing the installer:
-
 ```cmd
 SageTVSetupx64_x.x.x.exe /layout "%CD%\SageTV_layout" /quiet /norestart
 ```
 
 #### Windows PowerShell
-
-Run the following command from the directory containing the installer:
 
 ```powershell
 .\SageTVSetupx64_x.x.x.exe /layout "$PWD\SageTV_layout" /quiet /norestart
@@ -92,16 +86,7 @@ python -u usb_uirt_learn_pronto.py
 
 Aim the remote control at the USB-UIRT from close range. Press and hold one button until learning reaches 100 percent. Do not release and press the button repeatedly during learning.
 
-Example output:
-
-```text
-CALLBACK Progress=100%  Quality=100%  Carrier=39806 Hz
-
-Pronto Hex:
-0000 0068 0000 000D 0060 0019 0030 0019 0018 0019 0030 0019 0018 0019 0030 0019 0018 0019 0018 0019 0030 0019 0018 0019 0018 0019 0018 0019 0018 0409
-```
-
-The learned code is saved to:
+The learned code is displayed in the console and saved to:
 
 ```text
 learned_pronto.txt
