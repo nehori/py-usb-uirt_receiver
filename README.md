@@ -1,59 +1,106 @@
-# USB-UIRT IR Receiver(64bit)
+# USB-UIRT Pronto Hex Learner (64-bit)
 
-A Python script to capture IR signals using the USB-UIRT device and display Pronto codes. Supports any IR protocol (SONY SIRC, NEC, RC5, etc.) compatible with USB-UIRT.
+A Python script for learning infrared signals with USB-UIRT and saving transmission-ready Pronto Hex codes.
 
 ## Features
-- Initializes USB-UIRT with LED indicators and legacy receive mode.
-- Outputs unique Pronto codes to the console, ignoring duplicates.
-- Logs initialization and errors to `uuirtlog.txt`.
+
+- Uses the 64-bit USB-UIRT API.
+- Displays learning progress, signal quality, and carrier frequency.
+- Supports infrared protocols compatible with USB-UIRT, including SONY SIRC, NEC, and RC5.
+- Saves the learned Pronto Hex code to `learned_pronto.txt`.
+- Requires no additional Python packages.
 
 ## Requirements
-- Python 3.13+
-- USB-UIRT device (VID=0x0403, PID=0xF850)
-- `uuirtdrv.dll` and `ftd2xx.dll` (place in the script directory)
-- FTDI D2XX drivers ([download](https://ftdichip.com/drivers/d2xx-drivers/))
-- Windows 10/11 (other OS untested)
+
+- Python 3.13 or later, 64-bit
+- Windows 10 or Windows 11
+- USB-UIRT device (`VID_0403`, `PID_F850`)
+- FTDI D2XX driver or the signed USB-UIRT driver package
+- 64-bit `uuirtdrv.dll`
 
 ## Setup
-1. Install FTDI D2XX drivers from [ftdichip.com](https://ftdichip.com/drivers/d2xx-drivers/).
-2. Obtain `uuirtdrv.dll`:
-   - Download SageTV Windows binary(SageTVSetupx64_xxxx.exe) from [OpenSageTV releases](https://github.com/OpenSageTV/sagetv-windows/releases)
-   - Extract the installer and locate the DLL at `C:\Program Files\SageTV\redist\usbuirt\amd64\uuirtdrv.dll`
-   - Copy this file to your script directory
-     
-   OR Obtain `uuirtdrv.dll` from usbuirt.com:
-   - Go to the [Support](http://www.usbuirt.com/support.htm) and download the driver
-   - Extract the installer and locate the DLL at `C:\Program Files\SageTV\redist\usbuirt\amd64\uuirtdrv.dll`
-   - Copy this file to your script directory
-3. Place `ftd2xx.dll` in the same directory as `usb_receiver.py`.
-4. Install Python dependencies:
-   ```bash
-   pip install pyftd2xx
-   ```
+
+### 1. Install the device driver
+
+Install either of the following drivers:
+
+- [FTDI D2XX Drivers](https://ftdichip.com/drivers/d2xx-drivers/)
+- [Win7_Win8_Vista_v20601_signed.zip](http://www.usbuirt.com/Win7_Win8_Vista_v20601_signed.zip)
+
+When using `Win7_Win8_Vista_v20601_signed.zip`, extract the package and install `ftdibus.inf`.
+
+From an elevated Command Prompt:
+
+```cmd
+pnputil /add-driver "C:\path\to\Win7_Win8_Vista_v20601_signed\ftdibus.inf" /install
+```
+
+Alternatively, update the USB-UIRT driver from Device Manager and select the extracted `Win7_Win8_Vista_v20601_signed` directory.
+
+Disconnect and reconnect the USB-UIRT device after installation.
+
+### 2. Obtain the 64-bit `uuirtdrv.dll`
+
+#### Option A: OpenSageTV package
+
+Download a SageTV Windows x64 installer from [OpenSageTV Windows Releases](https://github.com/OpenSageTV/sagetv-windows/releases).
+
+Create an installer layout:
+
+```bash
+./SageTVSetupx64_x.x.x.exe /layout "$(cygpath -w "$PWD/SageTV_layout")" /quiet /norestart
+```
+
+Locate the DLL at:
+
+```text
+SageTV_layout\redist\usbuirt\amd64\uuirtdrv.dll
+```
+
+Copy `uuirtdrv.dll` to the script directory.
+
+#### Option B: USB-UIRT support package
+
+Check [USB-UIRT Support](http://www.usbuirt.com/support.htm) for the USB-UIRT software or API package.
+
+Use the 64-bit `uuirtdrv.dll` and copy it to the script directory.
+
+## Directory Layout
+
+```text
+usb-uirt-pronto-learner/
+├── README.md
+├── usb_uirt_learn_pronto.py
+└── uuirtdrv.dll
+```
 
 ## Usage
 
-- Run the script:
-   ```bash
-   python usb_receiver.py
-   ```
-- Press buttons on your IR remote to capture Pronto codes.
-- Check uuirtlog.txt for initialization and error logs.
+Run:
 
-## Example Output
-   ```bash
-   2025-07-11 09:56:53.365399: Waiting for IR signals...
-   2025-07-11 09:56:55.803926: Pronto code: 19000220A0E2
-   2025-07-11 09:56:58.203791: Pronto code: 190002A0A2E2
-   2025-07-11 09:56:59.372199: Pronto code: 1900022088EA
-   ```
+```bash
+python -u usb_uirt_learn_pronto.py
+```
 
-## Notes
-- **Pronto Code Format**: Codes (e.g., `19000220A0E2`) may be USB-UIRT-specific. Refer to [USB-UIRT documentation](http://www.usbuirt.com/) for details.
+Aim the remote control at the USB-UIRT from close range and press the same button repeatedly until learning reaches 100 percent.
+
+Example output:
+
+```text
+CALLBACK Progress=100%  Quality=97%  Carrier=39887 Hz
+
+Pronto Hex:
+0000 0067 0000 000D 0060 0019 0030 0019 0018 0019 0030 0019 0018 0019 0030 0019 0018 0019 0018 0019 0030 0019 0018 0019 0018 0019 0018 0019 0018 0FB1
+```
+
+The learned code is saved to:
+
+```text
+learned_pronto.txt
+```
+
+The saved Pronto Hex can be transmitted with `UUIRTTransmitIR` using the Pronto format value `0x0010`.
 
 ## License
+
 MIT License
-
-## Contributing
-
-Issues and pull requests are welcome! For bug reports or feature requests, include logs from `uuirtlog.txt` and details of your IR remote.
