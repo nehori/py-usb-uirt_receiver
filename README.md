@@ -1,13 +1,14 @@
-# USB-UIRT Pronto Hex Learner (64-bit)
+# USB-UIRT Pronto Hex Tools (64-bit)
 
-A Python script for learning infrared signals with USB-UIRT and saving Pronto Hex codes.
+Python scripts for learning infrared signals with USB-UIRT and transmitting saved Pronto Hex codes.
 
 ## Features
 
-- Uses the 64-bit USB-UIRT API.
+- Learns Pronto Hex codes from an infrared remote control.
 - Displays learning progress, signal quality, and carrier frequency.
-- Supports infrared protocols compatible with USB-UIRT.
-- Saves the learned Pronto Hex code to `learned_pronto.txt`.
+- Saves learned codes to a text file.
+- Transmits long Pronto Hex codes directly from a text file.
+- Uses the 64-bit USB-UIRT API without `uutx.exe`.
 - Requires no additional Python packages.
 
 ## Requirements
@@ -17,6 +18,8 @@ A Python script for learning infrared signals with USB-UIRT and saving Pronto He
 - USB-UIRT device (`VID_0403`, `PID_F850`)
 - FTDI D2XX driver or the signed USB-UIRT driver package
 - 64-bit `uuirtdrv.dll`
+
+Python and `uuirtdrv.dll` must have the same bitness.
 
 ## Setup
 
@@ -65,7 +68,7 @@ Locate the DLL at:
 SageTV_layout\redist\usbuirt\amd64\uuirtdrv.dll
 ```
 
-Copy `uuirtdrv.dll` to the script directory.
+Copy `uuirtdrv.dll` to the same directory as the Python scripts.
 
 The USB-UIRT software or API package may also be available from [USB-UIRT Support](http://www.usbuirt.com/support.htm).
 
@@ -75,10 +78,11 @@ The USB-UIRT software or API package may also be available from [USB-UIRT Suppor
 py-usb-uirt_receiver/
 ├── README.md
 ├── usb_uirt_learn_pronto.py
+├── usb_uirt_transmit.py
 └── uuirtdrv.dll
 ```
 
-## Usage
+## Learn a Pronto Hex Code
 
 ```bash
 python -u usb_uirt_learn_pronto.py
@@ -86,11 +90,35 @@ python -u usb_uirt_learn_pronto.py
 
 Aim the remote control at the USB-UIRT from close range. Press and hold one button until learning reaches 100 percent. Do not release and press the button repeatedly during learning.
 
-The learned code is displayed in the console and saved to:
+The learned code is displayed in the console and saved to `learned_pronto.txt`.
 
-```text
-learned_pronto.txt
+## Transmit a Pronto Hex Code
+
+By default, the script reads `learned_pronto.txt` from the current directory:
+
+```bash
+python -u usb_uirt_transmit.py
 ```
+
+Specify a file only when transmitting a different command:
+
+```bash
+python -u usb_uirt_transmit.py command_1.txt
+```
+
+A file in another directory can also be specified:
+
+```bash
+python -u usb_uirt_transmit.py "C:\path\to\commands\command_2.txt"
+```
+
+Set the repeat count when required:
+
+```bash
+python -u usb_uirt_transmit.py command_3.txt --repeat 5
+```
+
+Each input file must contain one raw Pronto Hex code beginning with `0000`. Long codes may span multiple lines.
 
 ## License
 
