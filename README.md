@@ -41,10 +41,28 @@ Disconnect and reconnect the USB-UIRT device after installation.
 
 Download a SageTV Windows x64 installer from [OpenSageTV Windows Releases](https://github.com/OpenSageTV/sagetv-windows/releases).
 
-Create an installer layout:
+#### Cygwin or Git Bash
+
+Run the following command from the directory containing the installer:
 
 ```bash
 ./SageTVSetupx64_x.x.x.exe /layout "$(cygpath -w "$PWD/SageTV_layout")" /quiet /norestart
+```
+
+#### Windows Command Prompt
+
+Run the following command from the directory containing the installer:
+
+```cmd
+SageTVSetupx64_x.x.x.exe /layout "%CD%\SageTV_layout" /quiet /norestart
+```
+
+#### Windows PowerShell
+
+Run the following command from the directory containing the installer:
+
+```powershell
+.\SageTVSetupx64_x.x.x.exe /layout "$PWD\SageTV_layout" /quiet /norestart
 ```
 
 Locate the DLL at:
@@ -77,10 +95,10 @@ Aim the remote control at the USB-UIRT from close range. Press and hold one butt
 Example output:
 
 ```text
-CALLBACK Progress=100%  Quality=97%  Carrier=39887 Hz
+CALLBACK Progress=100%  Quality=100%  Carrier=39806 Hz
 
 Pronto Hex:
-0000 0067 0000 000D 0060 0019 0030 0019 0018 0019 0030 0019 0018 0019 0030 0019 0018 0018 0018 0018 0031 0019 0018 0019 0018 0019 0018 0019 0018 040D
+0000 0068 0000 000D 0060 0019 0030 0019 0018 0019 0030 0019 0018 0019 0030 0019 0018 0019 0018 0019 0030 0019 0018 0019 0018 0019 0018 0019 0018 0409
 ```
 
 The learned code is saved to:
