@@ -40,7 +40,7 @@ def main() -> int:
 
     driver = ctypes.WinDLL(str(dll_path), use_last_error=True)
 
-    LEARN_CALLBACK = ctypes.WINFUNCTYPE(
+    learn_callback_type = ctypes.WINFUNCTYPE(
         None,
         ctypes.c_uint,
         ctypes.c_uint,
@@ -65,7 +65,7 @@ def main() -> int:
         ctypes.c_void_p,
         ctypes.c_int,
         ctypes.POINTER(ctypes.c_char),
-        LEARN_CALLBACK,
+        learn_callback_type,
         ctypes.c_void_p,
         ctypes.POINTER(BOOL),
         ctypes.c_uint,
@@ -103,7 +103,7 @@ def main() -> int:
     abort_flag = BOOL(0)
     outcome = {"result": None, "error": None}
 
-    @LEARN_CALLBACK
+    @learn_callback_type
     def learn_callback(progress, quality, carrier, user_data):
         print(
             f"CALLBACK Progress={progress}%  Quality={quality & 0xFF}%  "
@@ -131,7 +131,8 @@ def main() -> int:
         print("", flush=True)
         print("Learning started.", flush=True)
         print("Aim the remote at USB-UIRT from close range.", flush=True)
-        print("Press the same button repeatedly until learning reaches 100%.", flush=True)
+        print("Press and hold one button until learning reaches 100%.", flush=True)
+        print("Do not release and press the button repeatedly.", flush=True)
 
         worker = threading.Thread(target=learn_worker, daemon=True)
         worker.start()
